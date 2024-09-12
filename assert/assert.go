@@ -2,8 +2,6 @@ package assert
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 // Assert panics iff the condition is false. The panic is not a string
@@ -24,7 +22,7 @@ func Assert(cond bool, msg string) {
 		return
 	}
 
-	panic(msg)
+	panic(NewErrAssertFail(msg))
 }
 
 // AssertF same as Assert but with a format string and arguments that are in
@@ -47,7 +45,7 @@ func AssertF(cond bool, format string, args ...any) {
 		return
 	}
 
-	panic(fmt.Sprintf(format, args...))
+	panic(NewErrAssertFail(fmt.Sprintf(format, args...)))
 }
 
 // AssertErr is the same as Assert but for errors. Best used for ensuring that a function
@@ -69,13 +67,9 @@ func AssertErr(err error, f_name string, args ...any) {
 		return
 	}
 
-	var builder strings.Builder
+	msg := fmt.Sprintf(f_name, args...) + " = " + err.Error()
 
-	fmt.Fprintf(&builder, f_name, args)
-	builder.WriteString(" = ")
-	builder.WriteString(err.Error())
-
-	panic(builder.String())
+	panic(NewErrAssertFail(msg))
 }
 
 // AssertOk is the same as Assert but for booleans. Best used for ensuring that a function that
@@ -97,12 +91,9 @@ func AssertOk(cond bool, format string, args ...any) {
 		return
 	}
 
-	var builder strings.Builder
+	msg := fmt.Sprintf(format, args...) + " = false"
 
-	fmt.Fprintf(&builder, format, args...)
-	builder.WriteString(" = false")
-
-	panic(builder.String())
+	panic(NewErrAssertFail(msg))
 }
 
 // AssertDeref tries to dereference an element and panics if it is nil.
@@ -128,7 +119,7 @@ func AssertDeref[T any](elem *T, is_param bool, name string) T {
 
 	msg += " expected to not be nil"
 
-	panic(msg)
+	panic(NewErrAssertFail(msg))
 }
 
 // AssertNotNil panics if the element is nil.
@@ -151,7 +142,7 @@ func AssertNotNil(elem any, is_param bool, name string) {
 
 	msg += " expected to not be nil"
 
-	panic(msg)
+	panic(NewErrAssertFail(msg))
 }
 
 // AssertTypeOf panics if the element is not of the expected type.
@@ -163,15 +154,9 @@ func AssertNotNil(elem any, is_param bool, name string) {
 func AssertTypeOf[T any](elem any, target string, allow_nil bool) {
 	if elem == nil {
 		if !allow_nil {
-			var builder strings.Builder
+			msg := fmt.Sprintf("expected %q to be of type %T, got nil instead", target, *new(T))
 
-			builder.WriteString("expected ")
-			builder.WriteString(strconv.Quote(target))
-			builder.WriteString(" to be of type ")
-			builder.WriteString(fmt.Sprintf("%T", *new(T)))
-			builder.WriteString(", got nil instead")
-
-			panic(builder.String())
+			panic(NewErrAssertFail(msg))
 		}
 
 		return
@@ -179,17 +164,9 @@ func AssertTypeOf[T any](elem any, target string, allow_nil bool) {
 
 	_, ok := elem.(T)
 	if !ok {
-		var builder strings.Builder
+		msg := fmt.Sprintf("expected %q to be of type %T, got %T instead", target, *new(T), elem)
 
-		builder.WriteString("expected ")
-		builder.WriteString(strconv.Quote(target))
-		builder.WriteString(" to be of type ")
-		builder.WriteString(fmt.Sprintf("%T", *new(T)))
-		builder.WriteString(", got ")
-		builder.WriteString(fmt.Sprintf("%T", elem))
-		builder.WriteString(" instead")
-
-		panic(builder.String())
+		panic(NewErrAssertFail(msg))
 	}
 }
 
@@ -203,30 +180,16 @@ func AssertTypeOf[T any](elem any, target string, allow_nil bool) {
 //   - T: the converted element.
 func AssertConv[T any](elem any, target string) T {
 	if elem == nil {
-		var builder strings.Builder
+		msg := fmt.Sprintf("expected %q to be of type %T, got nil instead", target, *new(T))
 
-		builder.WriteString("expected ")
-		builder.WriteString(strconv.Quote(target))
-		builder.WriteString(" to be of type ")
-		builder.WriteString(fmt.Sprintf("%T", *new(T)))
-		builder.WriteString(", got nil instead")
-
-		panic(builder.String())
+		panic(NewErrAssertFail(msg))
 	}
 
 	res, ok := elem.(T)
 	if !ok {
-		var builder strings.Builder
+		msg := fmt.Sprintf("expected %q to be of type %T, got %T instead", target, *new(T), elem)
 
-		builder.WriteString("expected ")
-		builder.WriteString(strconv.Quote(target))
-		builder.WriteString(" to be of type ")
-		builder.WriteString(fmt.Sprintf("%T", *new(T)))
-		builder.WriteString(", got ")
-		builder.WriteString(fmt.Sprintf("%T", elem))
-		builder.WriteString(" instead")
-
-		panic(builder.String())
+		panic(NewErrAssertFail(msg))
 	}
 
 	return res
