@@ -1,7 +1,7 @@
 package c_assert
 
 import (
-	gda "github.com/PlayerR9/go-debug/assert"
+	gda "github.com/PlayerR9/go-debug/OLD/assert"
 )
 
 // NewErrAssertFail returns a new ErrAssertFail.

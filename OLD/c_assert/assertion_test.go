@@ -3,7 +3,7 @@ package c_assert
 import (
 	"testing"
 
-	gda "github.com/PlayerR9/go-debug/assert"
+	gda "github.com/PlayerR9/go-debug/OLD/assert"
 )
 
 func TestAssertion(t *testing.T) {

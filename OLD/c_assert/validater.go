@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	gda "github.com/PlayerR9/go-debug/assert"
+	gda "github.com/PlayerR9/go-debug/OLD/assert"
 )
 
 // Validater is an interface that can be validated.
