@@ -1,21 +1,8 @@
 package c_assert
 
 import (
-	gda "github.com/PlayerR9/go-debug/OLD/assert"
+	gda "github.com/PlayerR9/go-debug/assert"
 )
-
-// NewErrAssertFail returns a new ErrAssertFail.
-//
-// Parameters:
-//   - msg: the message of the error.
-//
-// Returns:
-//   - *assert.ErrAssertFail: the new error. Never returns nil.
-func NewErrAssertFail(msg string) *gda.ErrAssertFail {
-	return &gda.ErrAssertFail{
-		Msg: msg,
-	}
-}
 
 // Assertion is the struct that is used to perform assertions.
 type Assertion[T Asserter] struct {
@@ -87,7 +74,7 @@ func (a Assertion[T]) Panic() {
 		return
 	}
 
-	panic(gda.NewErrAssertFail(a.assert.Message(a.target, a.negative)))
+	panic(gda.NewErrAssertFailed(a.assert.Message(a.target, a.negative)))
 }
 
 // PanicWithMessage is the same as Panic but with a custom error message.
@@ -100,7 +87,7 @@ func (a Assertion[T]) PanicWithMessage(msg string) {
 		return
 	}
 
-	panic(gda.NewErrAssertFail(msg))
+	panic(gda.NewErrAssertFailed(msg))
 }
 
 // Error same as Panic but returns the *ErrAssertionFailed error instead of a panic.
@@ -117,7 +104,7 @@ func (a Assertion[T]) Error() error {
 		return nil
 	}
 
-	return gda.NewErrAssertFail(a.assert.Message(a.target, a.negative))
+	return gda.NewErrAssertFailed(a.assert.Message(a.target, a.negative))
 }
 
 // ErrorWithMessage is the same as PanicWithMessage but returns the *ErrAssertionFailed error instead of a panic.
@@ -133,7 +120,7 @@ func (a Assertion[T]) ErrorWithMessage(msg string) error {
 		return nil
 	}
 
-	return gda.NewErrAssertFail(msg)
+	return gda.NewErrAssertFailed(msg)
 }
 
 // Check checks whether the condition is met.

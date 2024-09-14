@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	gda "github.com/PlayerR9/go-debug/OLD/assert"
+	gda "github.com/PlayerR9/go-debug/assert"
 )
 
 // Validater is an interface that can be validated.
@@ -71,5 +71,5 @@ func AssertValidate(context string, target Target, obj Validater, allow_nil bool
 	builder.WriteString("is invalid: ")
 	builder.WriteString(err.Error())
 
-	panic(gda.NewErrAssertFail(builder.String()).Error())
+	panic(gda.NewErrAssertFailed(builder.String()).Error())
 }

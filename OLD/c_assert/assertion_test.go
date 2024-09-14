@@ -3,21 +3,21 @@ package c_assert
 import (
 	"testing"
 
-	gda "github.com/PlayerR9/go-debug/OLD/assert"
+	gda "github.com/PlayerR9/go-debug/assert"
 )
 
 func TestAssertion(t *testing.T) {
 	foo := "foo"
 
-	var actual_err gda.ErrAssertFail
+	var actual_err gda.ErrAssertFailed
 
 	res := AssertThat(NewVariable("foo"), NewOrderedAssert(foo).In("bar", "foo", "baz")).Not().Error()
 	if res == nil {
 		t.Errorf("expected an error but got none")
 	} else {
-		tmp, ok := res.(*gda.ErrAssertFail)
+		tmp, ok := res.(*gda.ErrAssertFailed)
 		if !ok {
-			t.Errorf("expected an error of type *ErrAssertFail but got %T", res)
+			t.Errorf("expected an error of type *ErrAssertFailed but got %T", res)
 		}
 
 		actual_err = *tmp
