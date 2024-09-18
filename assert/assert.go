@@ -126,3 +126,10 @@ func AssertNotNil(v any, name string) {
 
 	panic(NewErrAssertFailed(strconv.Quote(name) + " must not be nil"))
 }
+
+// TODO writes a panic message indicating that a case has not been handled yet.
+//
+// This function is intended to be used as a placeholder until the case is handled.
+func TODO() {
+	panic("TODO: Handle this case")
+}
